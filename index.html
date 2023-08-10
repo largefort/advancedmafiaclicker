@@ -3,6 +3,11 @@
 <head>
     <title>Advanced Idle Mafia Game</title>
     <style>
+        body {
+            background-color: #222;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
         #container {
             display: flex;
             justify-content: space-around;
@@ -11,15 +16,29 @@
             flex: 1;
             padding: 20px;
             border: 1px solid #ccc;
+            background-color: #333;
         }
         #actions {
             flex: 1;
             padding: 20px;
             border: 1px solid #ccc;
+            background-color: #333;
         }
         #money {
             font-size: 24px;
             transition: font-size 0.3s ease-in-out;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+        button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -187,12 +206,12 @@
         }
         
         function updateDisplay() {
-            document.getElementById("money").textContent = money.toFixed(2);
+            document.getElementById("money").textContent = `$${money.toFixed(2)}`;
             document.getElementById("dirtyMoney").textContent = dirtyMoney;
             document.getElementById("thugs").textContent = thugs;
             document.getElementById("territory").textContent = territory;
             document.getElementById("reputation").textContent = reputation;
-            document.getElementById("upgradeCost").textContent = upgradeCost.toFixed(2);
+            document.getElementById("upgradeCost").textContent = `$${upgradeCost.toFixed(2)}`;
         }
         
         // Automatically collect money every second
