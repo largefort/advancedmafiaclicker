@@ -47,7 +47,7 @@
     
     <div id="container">
         <div id="resources">
-            <p>Money: <span id="money">0</span></p>
+            <p>Money: $<span id="money">0.00</span></p>
             <p>Dirty Money: <span id="dirtyMoney">0</span></p>
             <p>Thugs: <span id="thugs">0</span></p>
             <p>Territory: <span id="territory">0</span></p>
@@ -206,7 +206,7 @@
         }
         
         function updateDisplay() {
-            document.getElementById("money").textContent = `$${money.toFixed(2)}`;
+            document.getElementById("money").textContent = money.toFixed(2);
             document.getElementById("dirtyMoney").textContent = dirtyMoney;
             document.getElementById("thugs").textContent = thugs;
             document.getElementById("territory").textContent = territory;
