@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Advanced Idle Mafia Game</title>
+    <style>
+        #container {
+            display: flex;
+            justify-content: space-around;
+        }
+        #resources {
+            flex: 1;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+        #actions {
+            flex: 1;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+        #money {
+            font-size: 24px;
+            transition: font-size 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <h1>Advanced Idle Mafia Game</h1>
+    
+    <div id="container">
+        <div id="resources">
+            <p>Money: <span id="money">0</span></p>
+            <p>Dirty Money: <span id="dirtyMoney">0</span></p>
+            <p>Thugs: <span id="thugs">0</span></p>
+            <p>Territory: <span id="territory">0</span></p>
+            <p>Reputation: <span id="reputation">0</span></p>
+        </div>
+        
+        <div id="actions">
+            <button onclick="collectMoney()">Collect Money</button>
+            <button onclick="collectDirtyMoney()">Collect Dirty Money</button>
+            <button onclick="hireThug()">Hire Thug ($50)</button>
+            <button onclick="upgradeThugs()">Upgrade Thugs ($200)</button>
+            <button onclick="initiateRivalAttack()">Initiate Rival Attack</button>
+            <button onclick="moneyLaundering()">Money Laundering</button>
+            <button onclick="expandTerritory()">Expand Territory ($1000)</button>
+            <button onclick="openBlackMarket()">Open Black Market</button>
+            <button onclick="bribery()">Bribery ($200)</button>
+            <button onclick="saveGame()">Save Game</button>
+            <button onclick="loadGame()">Load Game</button>
+        </div>
+    </div>
+    
+    <script>
+        let money = 0;
+        let dirtyMoney = 0;
+        let thugs = 0;
+        let thugMultiplier = 1;
+        let upgradeCost = 200;
+        let territory = 0;
+        let reputation = 0;
+        
+        function collectMoney() {
+            money += thugs * 10 * thugMultiplier;
+            animateMoney();
+            updateDisplay();
+        }
+        
+        function collectDirtyMoney() {
+            dirtyMoney += 5;
+            updateDisplay();
+        }
+        
+        function animateMoney() {
+            const moneyDisplay = document.getElementById("money");
+            moneyDisplay.style.fontSize = "28px"; // Increase font size temporarily
+            setTimeout(() => {
+                moneyDisplay.style.fontSize = "24px"; // Reset font size
+            }, 300);
+        }
+        
+        function hireThug() {
+            if (money >= 50) {
+                money -= 50;
+                thugs++;
+                updateDisplay();
+            }
+        }
+        
+        function upgradeThugs() {
+            if (money >= upgradeCost) {
+                money -= upgradeCost;
+                thugMultiplier += 0.5;
+                upgradeCost *= 2;
+                updateDisplay();
+            }
+        }
+        
+        function initiateRivalAttack() {
+            if (thugs >= 10) {
+                const chanceOfSuccess = Math.random();
+                if (chanceOfSuccess < 0.5) {
+                    const moneyLoss = money * 0.1;
+                    money -= moneyLoss;
+                    updateDisplay();
+                    alert(`Your rival gang attacked and stole $${moneyLoss.toFixed(2)}.`);
+                } else {
+                    alert("Your rival attack failed.");
+                }
+            } else {
+                alert("You need at least 10 thugs to initiate a rival attack.");
+            }
+        }
+        
+        function moneyLaundering() {
+            if (money >= 1000) {
+                const moneyToLaunder = money * 0.3;
+                money -= moneyToLaunder;
+                updateDisplay();
+                alert(`You successfully laundered $${moneyToLaunder.toFixed(2)}.`);
+            } else {
+                alert("You need at least $1000 to initiate money laundering.");
+            }
+        }
+        
+        function expandTerritory() {
+            if (money >= 1000) {
+                money -= 1000;
+                territory++;
+                updateDisplay();
+            } else {
+                alert("You need at least $1000 to expand your territory.");
+            }
+        }
+        
+        function openBlackMarket() {
+            if (territory >= 3) {
+                const resourcesTraded = Math.floor(dirtyMoney / 10);
+                money += resourcesTraded * 50;
+                dirtyMoney -= resourcesTraded * 10;
+                updateDisplay();
+                alert(`You traded ${resourcesTraded} resources on the black market.`);
+            } else {
+                alert("You need at least 3 territories to open the black market.");
+            }
+        }
+        
+        function bribery() {
+            if (reputation >= 50) {
+                money -= 200;
+                reputation += 10;
+                updateDisplay();
+                alert("You successfully bribed someone to improve your reputation.");
+            } else {
+                alert("You need at least 50 reputation points to attempt bribery.");
+            }
+        }
+        
+        function saveGame() {
+            const saveData = {
+                money: money,
+                dirtyMoney: dirtyMoney,
+                thugs: thugs,
+                thugMultiplier: thugMultiplier,
+                upgradeCost: upgradeCost,
+                territory: territory,
+                reputation: reputation
+            };
+            localStorage.setItem("idleMafiaSave", JSON.stringify(saveData));
+            alert("Game saved!");
+        }
+        
+        function loadGame() {
+            const saveData = JSON.parse(localStorage.getItem("idleMafiaSave"));
+            if (saveData) {
+                money = saveData.money;
+                dirtyMoney = saveData.dirtyMoney;
+                thugs = saveData.thugs;
+                thugMultiplier = saveData.thugMultiplier;
+                upgradeCost = saveData.upgradeCost;
+                territory = saveData.territory;
+                reputation = saveData.reputation;
+                updateDisplay();
+                alert("Game loaded!");
+            } else {
+                alert("No saved game found.");
+            }
+        }
+        
+        function updateDisplay() {
+            document.getElementById("money").textContent = money.toFixed(2);
+            document.getElementById("dirtyMoney").textContent = dirtyMoney;
+            document.getElementById("thugs").textContent = thugs;
+            document.getElementById("territory").textContent = territory;
+            document.getElementById("reputation").textContent = reputation;
+            document.getElementById("upgradeCost").textContent = upgradeCost.toFixed(2);
+        }
+        
+        // Automatically collect money every second
+        setInterval(collectMoney, 1000);
+        
+        // Initial display update
+        updateDisplay();
+    </script>
+</body>
+</html>
