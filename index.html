@@ -60,8 +60,6 @@
             <button onclick="expandTerritory()">Expand Territory ($1000)</button>
             <button onclick="openBlackMarket()">Open Black Market</button>
             <button onclick="bribery()">Bribery ($200)</button>
-            <button onclick="saveGame()">Save Game</button>
-            <button onclick="loadGame()">Load Game</button>
         </div>
     </div>
     
@@ -170,37 +168,6 @@
             }
         }
         
-        function saveGame() {
-            const saveData = {
-                money: money,
-                dirtyMoney: dirtyMoney,
-                thugs: thugs,
-                thugMultiplier: thugMultiplier,
-                upgradeCost: upgradeCost,
-                territory: territory,
-                reputation: reputation
-            };
-            localStorage.setItem("idleMafiaSave", JSON.stringify(saveData));
-            alert("Game saved!");
-        }
-        
-        function loadGame() {
-            const saveData = JSON.parse(localStorage.getItem("idleMafiaSave"));
-            if (saveData) {
-                money = saveData.money;
-                dirtyMoney = saveData.dirtyMoney;
-                thugs = saveData.thugs;
-                thugMultiplier = saveData.thugMultiplier;
-                upgradeCost = saveData.upgradeCost;
-                territory = saveData.territory;
-                reputation = saveData.reputation;
-                updateDisplay();
-                alert("Game loaded!");
-            } else {
-                alert("No saved game found.");
-            }
-        }
-        
         function updateDisplay() {
             document.getElementById("money").textContent = money;
             document.getElementById("dirtyMoney").textContent = dirtyMoney;
@@ -210,11 +177,24 @@
             document.getElementById("upgradeCost").textContent = `$${upgradeCost.toFixed(2)}`;
         }
         
+        // Load game data from local storage if available
+        const savedGameData = JSON.parse(localStorage.getItem("idleMafiaSave"));
+        if (savedGameData) {
+            money = savedGameData.money;
+            dirtyMoney = savedGameData.dirtyMoney;
+            thugs = savedGameData.thugs;
+            thugMultiplier = savedGameData.thugMultiplier;
+            upgradeCost = savedGameData.upgradeCost;
+            territory = savedGameData.territory;
+            reputation = savedGameData.reputation;
+            updateDisplay();
+        }
+        
         // Automatically collect money every second
         setInterval(collectMoney, 1000);
         
-        // Initial display update
-        updateDisplay();
+        // Automatically save game data every 10 seconds
+        setInterval(saveGame, 10000);
     </script>
 </body>
 </html>
